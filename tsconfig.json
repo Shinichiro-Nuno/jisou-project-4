@@ -29,5 +29,6 @@
     },
     "baseUrl": "."
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/components/ui/*"]
 }

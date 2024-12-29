@@ -2,7 +2,10 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { User } from "./types/user";
-import { Box, Link, Spinner, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link, Spinner, Stack } from "@chakra-ui/react";
+import { FaGithubSquare } from "react-icons/fa";
+import { SiQiita } from "react-icons/si";
+import { FaSquareXTwitter } from "react-icons/fa6";
 
 type CardParams = {
   id: string;
@@ -70,37 +73,38 @@ export const CardDetail = () => {
       {loading ? (
         <Spinner />
       ) : user ? (
-        <Stack>
-          <Box>名前: {user.name}</Box>
-          <Box>自己紹介: {user.description}</Box>
+        <Stack bg="white" px="4" py="2" borderRadius="md">
+          <Heading>{user.name}</Heading>
           <Box>
-            スキル:
-            {user.user_skill?.map((skill) => skill.skills.name).join(", ")}
+            <Box fontWeight="bold">自己紹介</Box>
+            <Box
+              fontSize="sm"
+              dangerouslySetInnerHTML={{ __html: user.description }}
+            />
           </Box>
           <Box>
-            GitHub:{" "}
+            <Box fontWeight="bold">好きな技術</Box>
+            <Box fontSize="sm">
+              {user.user_skill?.map((skill) => skill.skills.name).join(", ")}
+            </Box>
+          </Box>
+          <Flex justify="space-around">
             {user.github_id && (
               <Link href={user.githubUrl} target="_blank">
-                {user.github_id}
+                <FaGithubSquare size="24" />
               </Link>
             )}
-          </Box>
-          <Box>
-            Qiita:{" "}
             {user.qiita_id && (
               <Link href={user.qiitaUrl} target="_blank">
-                {user.qiita_id}
+                <SiQiita size="24" />
               </Link>
             )}
-          </Box>
-          <Box>
-            X:{" "}
             {user.x_id && (
               <Link href={user.xUrl} target="_blank">
-                {user.x_id}
+                <FaSquareXTwitter size="24" />
               </Link>
             )}
-          </Box>
+          </Flex>
         </Stack>
       ) : (
         <Box>データがありません</Box>

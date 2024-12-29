@@ -4,8 +4,9 @@ const theme = createSystem(defaultConfig, {
   globalCss: {
     "html, body": {
       backgroundColor: "gray.200",
+      display: "flex",
+      alignItems: "center",
       justifyContent: "center",
-      marginTop: "10px",
     },
   },
 });

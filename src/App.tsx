@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router";
-import { CardList } from "./CardList";
+import { TopPage } from "./TopPage";
 import { CardDetail } from "./CardDetail";
 import { supabase } from "./lib/supabase";
 import { CardRegister } from "./CardRegister";
@@ -17,7 +17,7 @@ function App() {
     <>
       <Toaster />
       <Routes>
-        <Route path="/" element={<CardList />} />
+        <Route path="/" element={<TopPage />} />
         <Route path="/cards/:id" element={<CardDetail />} />
         <Route path="/cards/register" element={<CardRegister />} />
       </Routes>

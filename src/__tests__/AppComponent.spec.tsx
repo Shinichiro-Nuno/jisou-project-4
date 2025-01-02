@@ -17,6 +17,6 @@ describe("title", () => {
         </ChakraProvider>
       </BrowserRouter>
     );
-    expect(screen.getByText("Hello World")).toBeInTheDocument();
+    expect(screen.getByText("デジタル名刺アプリ")).toBeInTheDocument();
   });
 });

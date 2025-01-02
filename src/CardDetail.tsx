@@ -1,8 +1,17 @@
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { User } from "./types/user";
-import { Box, Flex, Heading, Link, Spinner, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Link,
+  Spinner,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { FaGithubSquare } from "react-icons/fa";
 import { SiQiita } from "react-icons/si";
 import { FaSquareXTwitter } from "react-icons/fa6";
@@ -12,10 +21,10 @@ type CardParams = {
 };
 
 export const CardDetail = () => {
+  const navigate = useNavigate();
   const { id } = useParams<CardParams>();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserWithSkills = async () => {
@@ -44,8 +53,6 @@ export const CardDetail = () => {
           )
           .eq("id", id)
           .single<User>();
-        // console.log(data);
-        console.log(JSON.stringify(data, null, 2));
 
         if (error) throw error;
 
@@ -54,10 +61,8 @@ export const CardDetail = () => {
         setUser(user);
       } catch (err) {
         if (err instanceof Error) {
-          setError(err.message);
           console.error("データ取得エラー", err.message);
         } else {
-          setError("予期せぬエラーが発生しました");
           console.error("データ取得エラー", err);
         }
       } finally {
@@ -73,41 +78,56 @@ export const CardDetail = () => {
       {loading ? (
         <Spinner />
       ) : user ? (
-        <Stack bg="white" px="4" py="2" borderRadius="md">
-          <Heading>{user.name}</Heading>
-          <Box>
-            <Box fontWeight="bold">自己紹介</Box>
-            <Box
-              fontSize="sm"
-              dangerouslySetInnerHTML={{ __html: user.description }}
-            />
-          </Box>
-          <Box>
-            <Box fontWeight="bold">好きな技術</Box>
-            <Box fontSize="sm">
-              {user.user_skill?.map((skill) => skill.skills.name).join(", ")}
-            </Box>
-          </Box>
-          <Flex justify="space-around">
-            {user.github_id && (
-              <Link href={user.githubUrl} target="_blank">
-                <FaGithubSquare size="24" />
-              </Link>
-            )}
-            {user.qiita_id && (
-              <Link href={user.qiitaUrl} target="_blank">
-                <SiQiita size="24" />
-              </Link>
-            )}
-            {user.x_id && (
-              <Link href={user.xUrl} target="_blank">
-                <FaSquareXTwitter size="24" />
-              </Link>
-            )}
-          </Flex>
-        </Stack>
+        <>
+          <Stack gap="8">
+            <Stack bg="white" px="4" py="2" borderRadius="md">
+              <Heading>{user.name}</Heading>
+              <Box>
+                <Box fontWeight="bold">自己紹介</Box>
+                <Box
+                  fontSize="sm"
+                  dangerouslySetInnerHTML={{ __html: user.description }}
+                />
+              </Box>
+              <Box>
+                <Box fontWeight="bold">好きな技術</Box>
+                <Box fontSize="sm">
+                  {user.user_skill
+                    ?.map((skill) => skill.skills.name)
+                    .join(", ")}
+                </Box>
+              </Box>
+              <Flex justify="space-around">
+                {user.github_id && (
+                  <Link href={user.githubUrl} target="_blank">
+                    <FaGithubSquare size="24" />
+                  </Link>
+                )}
+                {user.qiita_id && (
+                  <Link href={user.qiitaUrl} target="_blank">
+                    <SiQiita size="24" />
+                  </Link>
+                )}
+                {user.x_id && (
+                  <Link href={user.xUrl} target="_blank">
+                    <FaSquareXTwitter size="24" />
+                  </Link>
+                )}
+              </Flex>
+            </Stack>
+            <Button
+              width="100%"
+              fontWeight="bold"
+              bg="#319795"
+              color="white"
+              onClick={() => navigate("/")}
+            >
+              戻る
+            </Button>
+          </Stack>
+        </>
       ) : (
-        <Box>データがありません</Box>
+        <Text>データがありません</Text>
       )}
     </>
   );

@@ -121,7 +121,7 @@ export const CardRegister = () => {
           <Stack>
             <Field
               label="好きな英単語 *"
-              invalid
+              invalid={!!errors.favoriteWord}
               errorText={errors.favoriteWord?.message}
             >
               <Input
@@ -135,7 +135,11 @@ export const CardRegister = () => {
                 })}
               />
             </Field>
-            <Field label="お名前 *" invalid errorText={errors.name?.message}>
+            <Field
+              label="お名前 *"
+              invalid={!!errors.name}
+              errorText={errors.name?.message}
+            >
               <Input
                 type="text"
                 {...register("name", { required: "必須項目です" })}
@@ -143,7 +147,7 @@ export const CardRegister = () => {
             </Field>
             <Field
               label="自己紹介 *"
-              invalid
+              invalid={!!errors.introduction}
               errorText={errors.introduction?.message}
             >
               <Textarea
@@ -152,7 +156,7 @@ export const CardRegister = () => {
             </Field>
             <Field
               label="好きな技術 *"
-              invalid
+              invalid={!!errors.skill}
               errorText={errors.skill?.message}
             >
               <Controller

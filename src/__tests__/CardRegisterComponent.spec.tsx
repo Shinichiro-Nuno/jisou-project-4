@@ -1,5 +1,5 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter, useNavigate } from "react-router";
 import { CardRegister } from "@/CardRegister";
@@ -96,8 +96,95 @@ describe("CardRegister", () => {
 
     await userEvent.click(registerButton);
 
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/");
+    await expect(mockNavigate).toHaveBeenCalledWith("/");
+  });
+
+  it("IDがないときにエラーメッセージが出る", async () => {
+    const favoriteWordInput = await screen.findByLabelText("好きな英単語 *");
+    const registerButton = await screen.findByTestId("register-button");
+
+    await userEvent.click(registerButton);
+
+    const fieldContainer = favoriteWordInput.closest("div[role='group']");
+    const errorMessage = within(fieldContainer as HTMLElement).getByText(
+      "必須項目です"
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("IDが英語の文字列でないときにエラーメッセージが出る", async () => {
+    const favoriteWordInput = await screen.findByLabelText("好きな英単語 *");
+    const registerButton = await screen.findByTestId("register-button");
+
+    await userEvent.type(favoriteWordInput, "テスト太郎");
+    await userEvent.click(registerButton);
+
+    const fieldContainer = favoriteWordInput.closest("div[role='group']");
+    const errorMessage = within(fieldContainer as HTMLElement).getByText(
+      "英語の文字列のみ使用できます"
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("お名前がないときにエラーメッセージが出る", async () => {
+    const nameInput = await screen.findByLabelText("お名前 *");
+    const registerButton = await screen.findByTestId("register-button");
+
+    await userEvent.click(registerButton);
+
+    const fieldContainer = nameInput.closest("div[role='group']");
+    const errorMessage = within(fieldContainer as HTMLElement).getByText(
+      "必須項目です"
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("自己紹介がないときにエラーメッセージが出る", async () => {
+    const descriptionInput = await screen.findByLabelText("自己紹介 *");
+    const registerButton = await screen.findByTestId("register-button");
+
+    await userEvent.click(registerButton);
+
+    const fieldContainer = descriptionInput.closest("div[role='group']");
+    const errorMessage = within(fieldContainer as HTMLElement).getByText(
+      "必須項目です"
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("好きな技術が選択されていないときにエラーメッセージが出る", async () => {
+    const skillSelect = screen.getByRole("combobox", { name: "好きな技術 *" });
+    const registerButton = await screen.findByTestId("register-button");
+
+    await userEvent.click(registerButton);
+
+    const fieldContainer = skillSelect.closest("div[role='group']");
+    const errorMessage = within(fieldContainer as HTMLElement).getByText(
+      "必須項目です"
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("オプションを入力しなくても登録が出来る", async () => {
+    const favoriteWordInput = await screen.findByLabelText("好きな英単語 *");
+    const nameInput = await screen.findByLabelText("お名前 *");
+    const descriptionInput = await screen.findByLabelText("自己紹介 *");
+
+    await userEvent.type(favoriteWordInput, "sampleword");
+    await userEvent.type(nameInput, "テスト太郎");
+    await userEvent.type(descriptionInput, "テスト太郎の自己紹介");
+
+    const skillSelect = screen.getByRole("combobox", {
+      name: "好きな技術 *",
     });
+    await userEvent.click(skillSelect);
+    const skillOption = await screen.findByText("React");
+    await userEvent.click(skillOption);
+
+    const registerButton = await screen.findByTestId("register-button");
+
+    await userEvent.click(registerButton);
+
+    await expect(mockNavigate).toHaveBeenCalledWith("/");
   });
 });

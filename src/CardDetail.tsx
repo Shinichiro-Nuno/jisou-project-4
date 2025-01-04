@@ -99,18 +99,22 @@ export const CardDetail = () => {
               </Box>
               <Flex justify="space-around">
                 {user.github_id && (
-                  <Link href={user.githubUrl} target="_blank">
-                    <FaGithubSquare size="24" />
+                  <Link
+                    href={user.githubUrl}
+                    target="_blank"
+                    aria-label="GitHub"
+                  >
+                    <FaGithubSquare data-testid="github-icon" size="24" />
                   </Link>
                 )}
                 {user.qiita_id && (
-                  <Link href={user.qiitaUrl} target="_blank">
-                    <SiQiita size="24" />
+                  <Link href={user.qiitaUrl} target="_blank" aria-label="Qiita">
+                    <SiQiita data-testid="qiita-icon" size="24" />
                   </Link>
                 )}
                 {user.x_id && (
-                  <Link href={user.xUrl} target="_blank">
-                    <FaSquareXTwitter size="24" />
+                  <Link href={user.xUrl} target="_blank" aria-label="X">
+                    <FaSquareXTwitter data-testid="x-icon" size="24" />
                   </Link>
                 )}
               </Flex>
@@ -122,12 +126,23 @@ export const CardDetail = () => {
               color="white"
               onClick={() => navigate("/")}
             >
-              戻る
+              TOPページへ戻る
             </Button>
           </Stack>
         </>
       ) : (
-        <Text>データがありません</Text>
+        <Stack>
+          <Text>データが見つかりませんでした</Text>
+          <Button
+            fontWeight="bold"
+            bg="#319795"
+            color="white"
+            mx="auto"
+            onClick={() => navigate("/")}
+          >
+            TOPページへ戻る
+          </Button>
+        </Stack>
       )}
     </>
   );

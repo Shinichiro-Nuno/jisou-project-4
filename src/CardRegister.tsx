@@ -206,6 +206,7 @@ export const CardRegister = () => {
             </Field>
             <Box>* は必須項目です</Box>
             <Button
+              data-testid="register-button"
               width="100%"
               fontWeight="bold"
               type="submit"

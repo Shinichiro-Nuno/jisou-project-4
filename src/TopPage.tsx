@@ -61,6 +61,7 @@ export const TopPage = () => {
           display="block"
           textAlign="center"
           onClick={() => navigate("/cards/register")}
+          role="link"
         >
           新規登録はこちら
         </Link>

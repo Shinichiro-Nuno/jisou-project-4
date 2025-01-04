@@ -101,8 +101,10 @@ describe("CardDetail", () => {
     expect(xLink).toHaveAttribute("href", "https://x.com/x-taro");
   });
 
-  it("戻るボタンをクリックすると/に遷移する", async () => {
-    const backButton = await screen.findByRole("button", { name: "戻る" });
+  it("TOPページへ戻るボタンをクリックすると/に遷移する", async () => {
+    const backButton = await screen.findByRole("button", {
+      name: "TOPページへ戻る",
+    });
 
     await userEvent.click(backButton);
     expect(mockNavigate).toHaveBeenCalledWith("/");

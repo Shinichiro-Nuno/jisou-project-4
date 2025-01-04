@@ -126,12 +126,23 @@ export const CardDetail = () => {
               color="white"
               onClick={() => navigate("/")}
             >
-              戻る
+              TOPページへ戻る
             </Button>
           </Stack>
         </>
       ) : (
-        <Text>データがありません</Text>
+        <Stack>
+          <Text>データが見つかりませんでした</Text>
+          <Button
+            fontWeight="bold"
+            bg="#319795"
+            color="white"
+            mx="auto"
+            onClick={() => navigate("/")}
+          >
+            TOPページへ戻る
+          </Button>
+        </Stack>
       )}
     </>
   );

@@ -1,50 +1,84 @@
-# React + TypeScript + Vite
+# プロジェクト名（デジタル名刺作成）
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 概要
 
-Currently, two official plugins are available:
+勉強会で名刺交換をする中で、書いてある内容がそれぞれ違うため話題が生まれにくく、持っている人持っていない人がいることに目をつけて誰もがその場で登録できるオンライン名刺システムを開発することにしました
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+オンライン名刺はその日まで有効で、次の日にはみれなくなるようにしようと考えました
 
-## Expanding the ESLint configuration
+実装はスマホの画面サイズで行ってください
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 機能
 
-- Configure the top-level `parserOptions` property like this:
+- TOP ページ
+  - ID を入力してボタンを押すと名刺詳細ページに移動
+- 新規名刺登録画面
+  - 名刺登録フォームを入力してボタンを押すと名刺を登録出来る
+  - オプションは入力しなくても登録可能
+  - 登録したあとは TOP ページに戻る
+- 名刺詳細ページ
+  - 登録した名刺の詳細が見れる
+  - 各リンクを押すとそのリンク先に移動
+- GitHub Actions のクーロンジョブ
+  - 毎日 6:00 に前日の users と user_skill テーブルのレコードを削除
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 使用技術
+
+### フロントエンド
+
+- React
+- TypeScript
+- Vite
+- Chakra UI V3
+
+### バックエンド
+
+- Supabase
+
+### インフラ
+
+- Firebase Hosting
+
+### その他
+
+- Jest
+- React Testing Library
+- GitHub Actions
+
+## セットアップ
+
+```bash
+git clone [リポジトリURL]
+cd [プロジェクト名]
+npm install
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 環境変数
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```
+VITE_SUPABASE_URL=xxxxx
+VITE_SUPABASE_ANON_KEY=xxxxx
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+# バッチ処理で使用
+SUPABASE_URL=xxxxx
+SUPABASE_ANON_KEY=xxxxx
+```
+
+## テスト実行
+
+```bash
+make test（npm run test）
+```
+
+## バッチファイル実行（前日の users と user_skill テーブルのレコードを削除）
+
+```bash
+npm run batch
+```
+
+## デプロイ
+
+```bash
+make deploy（npm run build && firebase deploy）
 ```

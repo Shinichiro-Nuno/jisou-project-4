@@ -1,0 +1,28 @@
+name: Daily Batch Process
+
+on:
+  schedule:
+    # JST 6:00 = UTC 21:00
+    # 日本時間の6:00に実行される
+    - cron: "0 21 * * *"
+  workflow_dispatch: # 手動実行を可能にする
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run batch
+        run: npm run batch
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
